@@ -10,4 +10,9 @@ class ListActivities extends ListRecords
     {
         return config('filament-logger.activity_resource');
     }
+
+    protected function getTableRecordsPerPageSelectOptions(): array
+    {
+        return [10, 25, 50, 100];
+    }
 }
