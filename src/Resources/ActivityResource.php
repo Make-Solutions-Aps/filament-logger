@@ -167,8 +167,8 @@ class ActivityResource extends Resource
                     ->dateTime(config('filament-logger.datetime_format', 'd/m/Y H:i:s'), config('app.timezone'))
                     ->sortable(),
             ])
-            ->defaultSort('created_at', 'desc')
-            ->bulkActions([])
+            ->defaultSort('id', 'desc')
+            ->toolbarActions([])
             ->filters([
                 SelectFilter::make('log_name')
                     ->label(__('filament-logger::filament-logger.resource.label.type'))
@@ -186,7 +186,7 @@ class ActivityResource extends Resource
 
 						return __('filament-logger::filament-logger.resource.label.old_attributes') . $data['old'];
 					})
-					->form([
+					->schema([
 						TextInput::make('old')
                             ->label(__('filament-logger::filament-logger.resource.label.old'))
                             ->hint(__('filament-logger::filament-logger.resource.label.properties_hint')),
@@ -207,7 +207,7 @@ class ActivityResource extends Resource
 
 						return __('filament-logger::filament-logger.resource.label.new_attributes') . $data['new'];
 					})
-					->form([
+					->schema([
 						TextInput::make('new')
                             ->label(__('filament-logger::filament-logger.resource.label.new'))
                             ->hint(__('filament-logger::filament-logger.resource.label.properties_hint')),
@@ -221,7 +221,7 @@ class ActivityResource extends Resource
 					}),
 
                 Filter::make('created_at')
-                    ->form([
+                    ->schema([
                         DatePicker::make('logged_at')
                             ->label(__('filament-logger::filament-logger.resource.label.logged_at'))
                             ->displayFormat(config('filament-logger.date_format', 'd/m/Y')),
