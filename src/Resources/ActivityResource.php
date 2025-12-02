@@ -48,7 +48,7 @@ class ActivityResource extends Resource
                         TextInput::make('causer_id')
                             ->afterStateHydrated(function ($component, ?Model $record) {
                                 /** @phpstan-ignore-next-line */
-                                return $component->state(trim($record->causer->first_name . ' ' . $record->causer->last_name));
+                                return $component->state(trim($record->causer?->first_name . ' ' . $record->causer?->last_name));
                             })
                             ->label(__('filament-logger::filament-logger.resource.label.user')),
 
@@ -167,7 +167,7 @@ class ActivityResource extends Resource
                         if (!$record->causer) {
                             return '-';
                         }
-                        return trim($record->causer->first_name . ' ' . $record->causer->last_name);
+                        return trim($record->causer?->first_name . ' ' . $record->causer?->last_name);
                     }),
 
                 TextColumn::make('created_at')
