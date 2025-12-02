@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\Activitylog\Models\Activity as ActivityModel;
@@ -47,7 +48,7 @@ class ActivityResource extends Resource
                         TextInput::make('causer_id')
                             ->afterStateHydrated(function ($component, ?Model $record) {
                                 /** @phpstan-ignore-next-line */
-                                return $component->state($record->causer?->name);
+                                return $component->state(trim($record->causer->first_name . ' ' . $record->causer->last_name));
                             })
                             ->label(__('filament-logger::filament-logger.resource.label.user')),
 
@@ -159,8 +160,15 @@ class ActivityResource extends Resource
                         return Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id;
                     }),
 
-                TextColumn::make('causer.name')
-                    ->label(__('filament-logger::filament-logger.resource.label.user')),
+                TextColumn::make('causer.first_name')
+                    ->label(__('filament-logger::filament-logger.resource.label.user'))
+                    ->formatStateUsing(function ($record) {
+                        Log::debug($record);
+                        if (!$record->causer) {
+                            return '-';
+                        }
+                        return trim($record->causer->first_name . ' ' . $record->causer->last_name);
+                    }),
 
                 TextColumn::make('created_at')
                     ->label(__('filament-logger::filament-logger.resource.label.logged_at'))
